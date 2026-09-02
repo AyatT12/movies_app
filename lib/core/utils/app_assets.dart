@@ -8,3 +8,4 @@ class AppAssets {
   static const String fifthOnBoarding = '${_base}onboarding5.png';
   static const String sixthOnBoarding = '${_base}onboarding6.png';
 }
+

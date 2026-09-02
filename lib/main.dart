@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'features/onboarding/presentation/pages/onboarding_view.dart';
+import 'features/auth/register/register_screen.dart';
+//import 'features/onboarding/presentation/pages/onboarding_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
-      home: const OnboardingView(),
+      home: const RegisterScreen(),
     );
   }
 }
