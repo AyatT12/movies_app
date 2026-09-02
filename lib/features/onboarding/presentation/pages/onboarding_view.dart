@@ -5,6 +5,7 @@ import '../../../../core/utils/app_styles.dart';
 import '../../domain/entities/onboarding_entity.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_outline_button.dart';
+import '../../../auth/presentation/pages/login_view.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});
@@ -194,6 +195,11 @@ class _OnboardingViewState extends State<OnboardingView> {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
+      );
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginView()),
       );
     }
   }
