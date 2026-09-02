@@ -7,5 +7,5 @@ class AppColors {
   static const Color black = Colors.black;
   static const Color grey = Color(0xFFA9A9A9);
   static const Color textfield = Color(0xFF282A28);
-
+  
 }

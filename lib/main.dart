@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'features/auth/register/register_screen.dart';
-//import 'features/onboarding/presentation/pages/onboarding_view.dart';
+import 'forget_password/forget_password.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,10 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
-      home: const RegisterScreen(),
+      home: RegisterScreen(), 
     );
   }
 }
