@@ -25,3 +25,4 @@ class AppAssets {
   static const String egIcon = '${_base}EG.png';
   static const String usIcon = '${_base}US.png';
 }
+
