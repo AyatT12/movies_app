@@ -21,16 +21,7 @@ class SocialLogin extends StatelessWidget {
 
         const SizedBox(height: 8),
 
-        Container(
-          width: 55,
-          height: 18,
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: AppColors.primary,
-            ),
-            borderRadius: BorderRadius.circular(17),
-          ),
-        ),
+
 
         Center(
           child: Container(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/utils/app_colors.dart';
+
 
 
 class AvatarSection extends StatelessWidget {
@@ -18,18 +18,18 @@ class AvatarSection extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 40,
-              backgroundImage: AssetImage('assets/images/gamer 2.png'),
+              backgroundImage: AssetImage('assets/images/person3.png'),
             ),
 
             CircleAvatar(
               radius: 60,
-              backgroundImage: AssetImage('assets/images/gamer (1).png'),
+              backgroundImage: AssetImage('assets/images/person1.png'),
 
             ),
 
             CircleAvatar(
               radius: 40,
-              backgroundImage: AssetImage('assets/images/gamer 3.png'),
+              backgroundImage: AssetImage('assets/images/person2.png'),
             ),
           ],
         ),

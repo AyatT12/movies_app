@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 import '../../../core/utils/app_colors.dart';
 import '../widgets/register_header.dart';
 import '../widgets/avatar_section.dart';
@@ -22,53 +21,55 @@ class RegisterScreen extends StatelessWidget {
             horizontal: 9,
           ),
 
-          child: Column(
-            children: [
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
 
-              // Header
-              const RegisterHeader(),
+                // Header
+                const RegisterHeader(),
 
-              // Avatars
-              const AvatarSection(),
+                // Avatars
+                const AvatarSection(),
 
-              const SizedBox(height: 12),
+                const SizedBox(height: 12),
 
-              // Fields
-              const RegisterField(
-                hint: 'Name',
-                icon: Icons.person_outline,
-              ),
+                // Fields
+                const RegisterField(
+                  hint: 'Name',
+                  icon: Icons.person_outline,
+                ),
 
-              const RegisterField(
-                hint: 'Email',
-                icon: Icons.email,
-              ),
+                const RegisterField(
+                  hint: 'Email',
+                  icon: Icons.email,
+                ),
 
-              const RegisterField(
-                hint: 'Password',
-                icon: Icons.lock,
-                isPassword: true,
-              ),
+                const RegisterField(
+                  hint: 'Password',
+                  icon: Icons.lock,
+                  isPassword: true,
+                ),
 
-              const RegisterField(
-                hint: 'Confirm Password',
-                icon: Icons.lock,
-                isPassword: true,
-              ),
+                const RegisterField(
+                  hint: 'Confirm Password',
+                  icon: Icons.lock,
+                  isPassword: true,
+                ),
 
-              const RegisterField(
-                hint: 'Phone Number',
-                icon: Icons.phone,
-              ),
+                const RegisterField(
+                  hint: 'Phone Number',
+                  icon: Icons.phone,
+                ),
 
-              const SizedBox(height: 2),
+                const SizedBox(height: 2),
 
-              // Button
-              const CreateAccountButton(),
+                // Button
+                const CreateAccountButton(),
 
-              // Login
-              const SocialLogin(),
-            ],
+                // Login
+                const SocialLogin(),
+              ],
+            ),
           ),
         ),
       ),
