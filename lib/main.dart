@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'features/auth/register/register_screen.dart';
+import 'features/auth/register/presentation/pages/register_screen.dart';
 //import 'features/onboarding/presentation/pages/onboarding_view.dart';
 
 void main() {

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/utils/app_colors.dart';
-import '../widgets/register_header.dart';
-import '../widgets/avatar_section.dart';
-import '../widgets/register_field.dart';
-import '../widgets/create_account_button.dart';
-import '../widgets/social_login.dart';
+import '../../../../../core/utils/app_colors.dart';
+import '../widgets/widgets/avatar_section.dart';
+import '../widgets/widgets/create_account_button.dart';
+import '../widgets/widgets/register_field.dart';
+import '../widgets/widgets/register_header.dart';
+import '../widgets/widgets/social_login.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
