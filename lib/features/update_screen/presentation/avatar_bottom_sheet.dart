@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
-import '../core/utils/app_colors.dart';
+import '../../../core/utils/app_colors.dart';
+
 
 class AvatarPickerBottomSheet extends StatelessWidget {
   final List<String> avatars;
