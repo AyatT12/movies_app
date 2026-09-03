@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
-import 'package:movies_app/update_screen/text_field.dart';
+import 'package:movies_app/features/update_screen/presentation/text_field.dart';
 
-import '../core/utils/app_colors.dart';
+import '../../../core/utils/app_colors.dart';
 
 import 'avatar_bottom_sheet.dart';
 import 'button.dart';
@@ -17,7 +17,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final List<String> _avatars = List.generate(
     9,
-        (index) => 'assets/images/avatar_${index + 1}.png',
+    (index) => 'assets/images/avatar_${index + 1}.png',
   );
 
   int _selectedAvatarIndex = 0;
@@ -75,7 +75,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 backgroundColor: AppColors.black,
                 child: CircleAvatar(
                   radius: 70,
-                  backgroundImage: AssetImage(AppAssets.avatars[_selectedAvatarIndex]),
+                  backgroundImage: AssetImage(
+                    AppAssets.avatars[_selectedAvatarIndex],
+                  ),
                 ),
               ),
             ),
