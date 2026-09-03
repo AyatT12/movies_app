@@ -8,7 +8,7 @@ class AppAssets {
   static const String fifthOnBoarding = '${_base}onboarding5.png';
   static const String sixthOnBoarding = '${_base}onboarding6.png';
 
-
+  
   static const List<String> avatars = [
     '${_base}avatar1.png',
     '${_base}avatar2.png',
@@ -20,4 +20,9 @@ class AppAssets {
     '${_base}avatar8.png',
     '${_base}avatar9.png',
   ];
+  static const String logo = '${_base}logo.png';
+  static const String googleIcon = '${_base}google_icon.png';
+  static const String egIcon = '${_base}EG.png';
+  static const String usIcon = '${_base}US.png';
 }
+
