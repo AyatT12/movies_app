@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'forget_password/forget_password.dart';
+import 'features/forget_password/presentetion/forget_password.dart';
+
 
 void main() {
   runApp(const MyApp());
