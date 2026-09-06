@@ -5,7 +5,7 @@ import '../../../../core/utils/app_styles.dart';
 import '../../domain/entities/onboarding_entity.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_outline_button.dart';
-import '../../../auth/presentation/pages/login_view.dart';
+import 'package:movies_app/features/auth/presentation/pages/login/login_view.dart';
 
 class OnboardingView extends StatefulWidget {
   const OnboardingView({super.key});
