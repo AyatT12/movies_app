@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:movies_app/features/onboarding/presentation/pages/onboarding_view.dart';
-import 'package:movies_app/l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:movies_app/core/di/service_locator.dart';
+import 'package:movies_app/l10n/app_localizations.dart';
+import 'package:movies_app/features/onboarding/presentation/pages/onboarding_view.dart';
+import 'features/home_screen/presentation/screens/home_view.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -42,7 +43,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
       locale: _locale,
