@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'features/home_screen/presentation/screens/home_view.dart';
 import 'features/onboarding/presentation/pages/onboarding_view.dart';
 
 void main() {
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
-      home: const OnboardingView(),
+      home: const MainNavigationScreen(),
     );
   }
 }
