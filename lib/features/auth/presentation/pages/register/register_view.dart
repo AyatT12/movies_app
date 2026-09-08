@@ -7,10 +7,11 @@ import 'package:movies_app/features/auth/presentation/widgets/auth_header.dart';
 import 'package:movies_app/features/onboarding/presentation/widgets/custom_button.dart';
 import 'package:movies_app/l10n/app_localizations.dart';
 import 'package:movies_app/main.dart';
-import 'package:movies_app/features/home/presentation/pages/home_view.dart';
 import 'package:movies_app/core/di/service_locator.dart';
 import 'package:movies_app/core/errors/failure.dart';
 import 'package:movies_app/features/auth/domain/repositories/auth_repository.dart';
+
+import '../../../../home_screen/presentation/screens/home_view.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});

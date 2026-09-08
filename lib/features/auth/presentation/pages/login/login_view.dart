@@ -7,11 +7,12 @@ import 'package:movies_app/features/auth/presentation/pages/register/register_vi
 import 'package:movies_app/features/auth/presentation/pages/forget_password/forget_password_view.dart';
 import 'package:movies_app/l10n/app_localizations.dart';
 import 'package:movies_app/features/auth/presentation/widgets/social_login.dart';
-import 'package:movies_app/features/home/presentation/pages/home_view.dart';
 import 'package:movies_app/features/profile/presentation/pages/update_profile/update_profile_view.dart';
 import 'package:movies_app/core/di/service_locator.dart';
 import 'package:movies_app/core/errors/failure.dart';
 import 'package:movies_app/features/auth/domain/repositories/auth_repository.dart';
+
+import '../../../../home_screen/presentation/screens/home_view.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
