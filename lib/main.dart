@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'features/home_screen/presentation/screens/home_view.dart';
+import 'features/onboarding/presentation/pages/onboarding_view.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:movies_app/features/onboarding/presentation/pages/onboarding_view.dart';
 import 'package:movies_app/l10n/app_localizations.dart';
@@ -42,18 +44,10 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
-      locale: _locale,
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('en'), Locale('ar')],
-      home: const OnboardingView(),
+      home: const MainNavigationScreen(),
     );
   }
 }
