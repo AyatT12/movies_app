@@ -1,0 +1,22 @@
+{
+  "login": "تسجيل الدخول",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة المرور",
+  "forgetPassword": "نسيت كلمة المرور؟",
+  "dontHaveAccount": "ليس لديك حساب؟ ",
+  "createOne": "أنشئ حساباً",
+  "or": "أو",
+  "loginWithGoogle": "تسجيل الدخول باستخدام جوجل",
+  "register": "إنشاء حساب",
+  "name": "الاسم",
+  "confirmPassword": "تأكيد كلمة المرور",
+  "phoneNumber": "رقم الهاتف",
+  "createAccount": "إنشاء الحساب",
+  "alreadyHaveAccount": "لديك حساب بالفعل؟ ",
+  "verifyEmail": "التحقق من البريد الإلكتروني",
+  "updateProfile": "تحديث الملف الشخصي",
+  "userName": "اسم المستخدم",
+  "resetPassword": "إعادة تعيين كلمة المرور",
+  "deleteAccount": "حذف الحساب",
+  "updateData": "تحديث البيانات"
+}
