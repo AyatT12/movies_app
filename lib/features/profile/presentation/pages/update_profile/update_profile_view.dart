@@ -83,6 +83,25 @@ class _UpdateProfileViewState extends State<UpdateProfileView> {
     }
   }
 
+  void _logout() async {
+    try {
+      await sl<AuthRepository>().signOut();
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const LoginView()),
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        final failure = Failure.fromFirebaseException(e);
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(failure.message)));
+      }
+    }
+  }
+
   void _deleteAccount() async {
     try {
       await sl<ProfileRepository>().deleteAccount();
