@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/bottom_navigation_bar.dart';
 
 import 'home_tab_screen.dart';
+import 'profile_tab_screen.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -13,13 +14,18 @@ class HomeView extends StatefulWidget {
 class _MainNavigationScreenState extends State<HomeView> {
   int _selectedIndex = 0;
 
+  late final List<Widget> _pages;
 
-  final List<Widget> _pages = const [
-    HomeTabScreen(),
-    Center(child: Text('Search Tab', style: TextStyle(color: Colors.white, fontSize: 18))),
-    Center(child: Text('Explore Tab', style: TextStyle(color: Colors.white, fontSize: 18))),
-    Center(child: Text('Profile Tab', style: TextStyle(color: Colors.white, fontSize: 18))),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _pages = const [
+      HomeTabScreen(),
+      Center(child: Text('Search Tab', style: TextStyle(color: Colors.white, fontSize: 18))),
+      Center(child: Text('Explore Tab', style: TextStyle(color: Colors.white, fontSize: 18))),
+      ProfileTabScreen(),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
