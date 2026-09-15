@@ -67,4 +67,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get updateData => 'Update Data';
+
+  @override
+  String get watch => 'Watch';
+
+  @override
+  String get screenShots => 'Screen Shots';
+
+  @override
+  String get summary => 'Summary';
+
+  @override
+  String get cast => 'Cast';
+
+  @override
+  String get genres => 'Genres';
 }

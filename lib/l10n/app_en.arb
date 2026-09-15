@@ -18,5 +18,10 @@
   "userName": "User Name",
   "resetPassword": "Reset Password",
   "deleteAccount": "Delete Account",
-  "updateData": "Update Data"
+  "updateData": "Update Data",
+  "watch": "Watch",
+  "screenShots": "Screen Shots",
+  "summary": "Summary",
+  "cast": "Cast",
+  "genres": "Genres"
 }

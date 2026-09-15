@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:movies_app/features/auth/presentation/pages/login/login_view.dart';
 import 'package:movies_app/features/home_screen/presentation/screens/home_view.dart';
-import 'package:movies_app/features/onboarding/presentation/pages/onboarding_view.dart';
 import 'package:movies_app/l10n/app_localizations.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:movies_app/core/di/service_locator.dart';

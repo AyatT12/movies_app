@@ -21,8 +21,18 @@ class _MainNavigationScreenState extends State<HomeView> {
     super.initState();
     _pages = const [
       HomeTabScreen(),
-      Center(child: Text('Search Tab', style: TextStyle(color: Colors.white, fontSize: 18))),
-      Center(child: Text('Explore Tab', style: TextStyle(color: Colors.white, fontSize: 18))),
+      Center(
+        child: Text(
+          'Search Tab',
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+      ),
+      Center(
+        child: Text(
+          'Explore Tab',
+          style: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+      ),
       ProfileTabScreen(),
     ];
   }
@@ -30,13 +40,9 @@ class _MainNavigationScreenState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF121312),
-      body: SafeArea(
-        child: IndexedStack(
-          index: _selectedIndex,
-          children: _pages,
-        ),
-      ),
+      extendBody: true,
+      backgroundColor: Colors.transparent,
+      body: IndexedStack(index: _selectedIndex, children: _pages),
 
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _selectedIndex,
