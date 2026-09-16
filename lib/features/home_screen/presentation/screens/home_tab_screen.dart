@@ -5,6 +5,7 @@ import '../../../../core/utils/app_colors.dart';
 import '../../data/datasources/home_remote_data_source.dart';
 import '../../data/movie_model.dart';
 import '../widgets/movie_card.dart';
+import 'movie_details_screen.dart';
 
 class HomeTabScreen extends StatefulWidget {
   const HomeTabScreen({super.key});
@@ -150,6 +151,13 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                               width: 215,
                               height: 310,
                               borderRadius: 16,
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => MovieDetailsScreen(movieId: movies[index].id),
+                                  ),
+                                );
+                              },
                             ),
                           );
                         },
@@ -225,6 +233,13 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                             width: 146,
                             height: 220,
                             borderRadius: 16,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => MovieDetailsScreen(movieId: movies[index].id),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),

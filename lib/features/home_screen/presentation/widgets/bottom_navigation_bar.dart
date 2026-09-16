@@ -14,16 +14,12 @@ class CustomBottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16,vertical: 10),
-      padding: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 20),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         color: const Color(0xFF282A28),
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color:AppColors.cardDark,
-          ),
-        ],
+        boxShadow: [BoxShadow(color: AppColors.cardDark)],
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -1,3 +1,5 @@
+import '../domain/entities/movie_entity.dart';
+
 class MovieModel {
   final int id;
   final String title;
@@ -23,6 +25,15 @@ class MovieModel {
           ?.map((e) => e.toString())
           .toList() ??
           [],
+    );
+  }
+
+  MovieEntity toEntity() {
+    return MovieEntity(
+      id: id,
+      title: title,
+      rating: rating,
+      mediumCoverImage: mediumCoverImage,
     );
   }
 }

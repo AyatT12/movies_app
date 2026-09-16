@@ -18,5 +18,10 @@
   "userName": "اسم المستخدم",
   "resetPassword": "إعادة تعيين كلمة المرور",
   "deleteAccount": "حذف الحساب",
-  "updateData": "تحديث البيانات"
+  "updateData": "تحديث البيانات",
+  "watch": "مشاهدة",
+  "screenShots": "لقطات الشاشة",
+  "summary": "الملخص",
+  "cast": "طاقم العمل",
+  "genres": "الأنواع"
 }

@@ -67,4 +67,19 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get updateData => 'تحديث البيانات';
+
+  @override
+  String get watch => 'مشاهدة';
+
+  @override
+  String get screenShots => 'لقطات الشاشة';
+
+  @override
+  String get summary => 'الملخص';
+
+  @override
+  String get cast => 'طاقم العمل';
+
+  @override
+  String get genres => 'الأنواع';
 }
