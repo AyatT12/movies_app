@@ -74,13 +74,13 @@ class MovieDetailsModel {
     return MovieDetailsModel(
       id: json['id'] ?? 0,
       title:
-          json['title']?.toString() ?? json['title_english']?.toString() ?? '',
+      json['title']?.toString() ?? json['title_english']?.toString() ?? '',
       rating: json['rating'] ?? 0.0,
       descriptionIntro: json['description_intro']?.toString() ?? '',
       descriptionFull: json['description_full']?.toString() ?? '',
       backgroundImage: json['background_image']?.toString() ?? '',
       mediumCoverImage:
-          json['large_cover_image']?.toString() ??
+      json['large_cover_image']?.toString() ??
           json['medium_cover_image']?.toString() ??
           '',
       year: json['year'] ?? DateTime.now().year,
@@ -107,6 +107,41 @@ class MovieDetailsModel {
       genres: genres,
       screenshots: screenshots,
       cast: cast.map((item) => item.toEntity()).toList(),
+    );
+  }
+}
+
+class MovieSuggestionModel {
+  final int id;
+  final String title;
+  final num rating;
+  final String mediumCoverImage;
+
+  const MovieSuggestionModel({
+    required this.id,
+    required this.title,
+    required this.rating,
+    required this.mediumCoverImage,
+  });
+
+  factory MovieSuggestionModel.fromJson(Map<String, dynamic> json) {
+    return MovieSuggestionModel(
+      id: json['id'] ?? 0,
+      title: json['title'] ?? '',
+      rating: json['rating'] ?? 0.0,
+      mediumCoverImage:
+      json['medium_cover_image']?.toString() ??
+          json['large_cover_image']?.toString() ??
+          '',
+    );
+  }
+
+  MovieSuggestionEntity toEntity() {
+    return MovieSuggestionEntity(
+      id: id,
+      title: title,
+      rating: rating.toDouble(),
+      mediumCoverImage: mediumCoverImage,
     );
   }
 }

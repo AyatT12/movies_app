@@ -39,3 +39,17 @@ class MovieDetailsEntity {
     required this.cast,
   });
 }
+
+class MovieSuggestionEntity {
+  final int id;
+  final String title;
+  final double rating;
+  final String mediumCoverImage;
+
+  const MovieSuggestionEntity({
+    required this.id,
+    required this.title,
+    required this.rating,
+    required this.mediumCoverImage,
+  });
+}

@@ -17,6 +17,7 @@ class MovieDetailsScreen extends StatefulWidget {
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   final HomeRemoteDataSource _dataSource = HomeRemoteDataSource();
   late Future<MovieDetailsEntity> _movieDetailsFuture;
+  late Future<List<MovieSuggestionEntity>> _movieSuggestionsFuture;
 
   @override
   void initState() {
@@ -24,6 +25,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
     _movieDetailsFuture = _dataSource
         .getMovieDetails(widget.movieId)
         .then((model) => model.toEntity());
+    _movieSuggestionsFuture = _dataSource
+        .getMovieSuggestions(widget.movieId)
+        .then((models) => models.map((m) => m.toEntity()).toList());
   }
 
   @override
@@ -197,7 +201,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ),
                       SizedBox(height: 16),
                       ...movie.screenshots.map(
-                        (image) => Padding(
+                            (image) => Padding(
                           padding: EdgeInsets.only(bottom: 16),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(16),
@@ -219,7 +223,119 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 32),
+                      SizedBox(height: 8),
+                      Text(
+                        'Similar',
+                        style: AppTextStyles.sectionHeader,
+                      ),
+                      SizedBox(height: 8),
+                      FutureBuilder<List<MovieSuggestionEntity>>(
+                        future: _movieSuggestionsFuture,
+                        builder: (context, suggestionSnapshot) {
+                          if (suggestionSnapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                              child: CircularProgressIndicator(
+                                color: AppColors.primary,
+                              ),
+                            );
+                          }
+                          if (!suggestionSnapshot.hasData ||
+                              suggestionSnapshot.data!.isEmpty) {
+                            return SizedBox.shrink();
+                          }
+
+                          final similarMovies = suggestionSnapshot.data!;
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: similarMovies.length > 4
+                                ? 4
+                                : similarMovies.length,
+                            gridDelegate:
+                            SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                              childAspectRatio: 0.7,
+                            ),
+                            itemBuilder: (context, index) {
+                              final item = similarMovies[index];
+                              return GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MovieDetailsScreen(
+                                        movieId: item.id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Stack(
+                                    children: [
+                                      Positioned.fill(
+                                        child: Image.network(
+                                          item.mediumCoverImage,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, __, ___) =>
+                                              Container(
+                                                color: AppColors.cardDark,
+                                                child: Icon(
+                                                  Icons.broken_image,
+                                                  color: AppColors.grey,
+                                                ),
+                                              ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        top: 8,
+                                        left: 8,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 8,
+                                            vertical: 4,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.7,
+                                            ),
+                                            borderRadius:
+                                            BorderRadius.circular(10),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                '${item.rating}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              SizedBox(width: 4),
+                                              Icon(
+                                                Icons.star,
+                                                color: AppColors.primary,
+                                                size: 14,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      SizedBox(height: 16),
                       Text(
                         localizations?.summary ?? 'Summary',
                         style: AppTextStyles.sectionHeader,
@@ -238,7 +354,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       ),
                       SizedBox(height: 16),
                       ...movie.cast.map(
-                        (member) => Container(
+                            (member) => Container(
                           margin: EdgeInsets.only(bottom: 12),
                           padding: EdgeInsets.all(8),
                           decoration: BoxDecoration(
@@ -251,23 +367,23 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                 borderRadius: BorderRadius.circular(12),
                                 child: member.imageUrl.isNotEmpty
                                     ? Image.network(
-                                        member.imageUrl,
-                                        width: 65,
-                                        height: 65,
-                                        fit: BoxFit.cover,
-                                        errorBuilder: (_, __, ___) => Container(
-                                          width: 65,
-                                          height: 65,
-                                          color: Colors.grey,
-                                          child: Icon(Icons.person),
-                                        ),
-                                      )
+                                  member.imageUrl,
+                                  width: 65,
+                                  height: 65,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (_, __, ___) => Container(
+                                    width: 65,
+                                    height: 65,
+                                    color: Colors.grey,
+                                    child: Icon(Icons.person),
+                                  ),
+                                )
                                     : Container(
-                                        width: 65,
-                                        height: 65,
-                                        color: Colors.grey,
-                                        child: Icon(Icons.person),
-                                      ),
+                                  width: 65,
+                                  height: 65,
+                                  color: Colors.grey,
+                                  child: Icon(Icons.person),
+                                ),
                               ),
                               SizedBox(width: 16),
                               Expanded(
@@ -301,20 +417,20 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         children: movie.genres
                             .map(
                               (genre) => Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                  vertical: 10,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: AppColors.cardDark,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Text(
-                                  genre,
-                                  style: AppTextStyles.genreText,
-                                ),
-                              ),
-                            )
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColors.cardDark,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              genre,
+                              style: AppTextStyles.genreText,
+                            ),
+                          ),
+                        )
                             .toList(),
                       ),
                       SizedBox(height: 50),

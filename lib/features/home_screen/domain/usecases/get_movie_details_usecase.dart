@@ -10,3 +10,13 @@ class GetMovieDetailsUseCase {
     return await repository.getMovieDetails(movieId);
   }
 }
+
+class GetMovieSuggestionsUseCase {
+  final HomeRepository repository;
+
+  GetMovieSuggestionsUseCase(this.repository);
+
+  Future<List<MovieSuggestionEntity>> call(int movieId) async {
+    return await repository.getMovieSuggestions(movieId);
+  }
+}
