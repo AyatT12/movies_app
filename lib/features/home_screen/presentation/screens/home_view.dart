@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../browse/presentation/screens/browse_tab_screen.dart';
+import '../../../search/presentation/screens/search_tab_screen.dart';
 import '../widgets/bottom_navigation_bar.dart';
 
 import 'home_tab_screen.dart';
@@ -19,21 +21,17 @@ class _MainNavigationScreenState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    _pages = const [
-      HomeTabScreen(),
-      Center(
-        child: Text(
-          'Search Tab',
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
+    _pages = [
+      HomeTabScreen(
+        onSeeMore: () {
+          setState(() {
+            _selectedIndex = 2;
+          });
+        },
       ),
-      Center(
-        child: Text(
-          'Explore Tab',
-          style: TextStyle(color: Colors.white, fontSize: 18),
-        ),
-      ),
-      ProfileTabScreen(),
+      const SearchTabScreen(),
+      const BrowseTabScreen(),
+      const ProfileTabScreen(),
     ];
   }
 

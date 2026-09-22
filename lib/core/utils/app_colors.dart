@@ -10,16 +10,10 @@ class AppColors {
   static const Color delete = Color(0xFFE82626);
   static const Color textfield = Color(0xFF282A28);
 
-
-  // Home Screen Colors
   static const Color cardDark = Color(0xFF282A28);
   static const Color navBarBackground = Color(0xFF212121);
   static const Color red = Colors.redAccent;
   static const Color overlayBlack = Color(0x8C000000);
   static const Color ratingBadgeBg = Color(0xA6121312);
   static const Color textSecondary = Color(0xB3FFFFFF);
-
-
-
-
 }
