@@ -8,7 +8,8 @@ import '../widgets/movie_card.dart';
 import 'movie_details_screen.dart';
 
 class HomeTabScreen extends StatefulWidget {
-  const HomeTabScreen({super.key});
+  final VoidCallback? onSeeMore;
+  const HomeTabScreen({super.key, this.onSeeMore});
 
   @override
   State<HomeTabScreen> createState() => _HomeTabScreenState();
@@ -71,7 +72,6 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
 
           return Stack(
             children: [
-
               Positioned(
                 top: 0,
                 left: 0,
@@ -87,9 +87,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     ),
                     BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 2.0, sigmaY: 2.0),
-                      child: Container(
-                        color: Colors.black.withOpacity(0.3),
-                      ),
+                      child: Container(color: Colors.black.withOpacity(0.3)),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -115,21 +113,21 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                   children: [
                     const SizedBox(height: 20),
 
-
                     Center(
                       child: Image.asset(
                         AppAssets.availableNow,
                         height: 93,
                         fit: BoxFit.contain,
                         errorBuilder: (context, error, stackTrace) {
-                          debugPrint('Error loading availableNow image: $error');
+                          debugPrint(
+                            'Error loading availableNow image: $error',
+                          );
                           return const SizedBox(height: 42);
                         },
                       ),
                     ),
 
                     const SizedBox(height: 16),
-
 
                     SizedBox(
                       height: 330,
@@ -154,7 +152,9 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (_) => MovieDetailsScreen(movieId: movies[index].id),
+                                    builder: (_) => MovieDetailsScreen(
+                                      movieId: movies[index].id,
+                                    ),
                                   ),
                                 );
                               },
@@ -165,7 +165,6 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     ),
 
                     const SizedBox(height: 16),
-
 
                     Center(
                       child: Image.asset(
@@ -181,13 +180,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
 
                     const SizedBox(height: 24),
 
-
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Text(
+                        children: [
+                          const Text(
                             'Action',
                             style: TextStyle(
                               color: AppColors.white,
@@ -195,30 +193,32 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                               fontWeight: FontWeight.w400,
                             ),
                           ),
-                          Row(
-                            children: [
-                              Text(
-                                'See More',
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                          GestureDetector(
+                            onTap: widget.onSeeMore,
+                            child: Row(
+                              children: const [
+                                Text(
+                                  'See More',
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(width: 4),
-                              Icon(
-                                Icons.arrow_forward_ios,
-                                color: AppColors.primary,
-                                size: 12,
-                              ),
-                            ],
+                                SizedBox(width: 4),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: AppColors.primary,
+                                  size: 12,
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
 
                     const SizedBox(height: 12),
-
 
                     SizedBox(
                       height: 195,
@@ -236,7 +236,9 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (_) => MovieDetailsScreen(movieId: movies[index].id),
+                                  builder: (_) => MovieDetailsScreen(
+                                    movieId: movies[index].id,
+                                  ),
                                 ),
                               );
                             },
