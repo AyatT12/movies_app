@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
-import '../../../core/utils/app_colors.dart';
-
+import 'package:movies_app/core/utils/app_colors.dart';
 
 class AvatarPickerBottomSheet extends StatelessWidget {
   final List<String> avatars;
@@ -16,11 +15,11 @@ class AvatarPickerBottomSheet extends StatelessWidget {
   });
 
   static void show(
-      BuildContext context, {
-        required List<String> avatars,
-        required int selectedIndex,
-        required ValueChanged<int> onAvatarSelected,
-      }) {
+    BuildContext context, {
+    required List<String> avatars,
+    required int selectedIndex,
+    required ValueChanged<int> onAvatarSelected,
+  }) {
     showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.background,
@@ -37,15 +36,15 @@ class AvatarPickerBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return Container(
+      padding: const EdgeInsets.all(24.0),
       child: GridView.builder(
         shrinkWrap: true,
         itemCount: avatars.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
-          crossAxisSpacing: 12,
-          mainAxisSpacing: 12,
+          crossAxisSpacing: 16,
+          mainAxisSpacing: 16,
         ),
         itemBuilder: (context, index) {
           final isSelected = selectedIndex == index;
@@ -65,8 +64,8 @@ class AvatarPickerBottomSheet extends StatelessWidget {
               ),
               child: Center(
                 child: CircleAvatar(
-                  radius: 36,
-                  backgroundImage: AssetImage(AppAssets.avatars[index]),
+                  radius: 40,
+                  backgroundImage: AssetImage(avatars[index]),
                 ),
               ),
             ),
