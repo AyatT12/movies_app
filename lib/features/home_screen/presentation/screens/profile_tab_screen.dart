@@ -5,6 +5,8 @@ import 'package:movies_app/features/auth/domain/repositories/auth_repository.dar
 import 'package:movies_app/features/auth/presentation/pages/login/login_view.dart';
 import 'package:movies_app/features/profile/presentation/pages/update_profile/update_profile_view.dart';
 
+import '../../../profile_screen/presentation/profile_view.dart';
+
 class ProfileTabScreen extends StatelessWidget {
   const ProfileTabScreen({super.key});
 
@@ -47,7 +49,7 @@ class ProfileTabScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => const UpdateProfileView(),
+                    builder: (context) => const ProfileView(),
                   ),
                 );
               },
