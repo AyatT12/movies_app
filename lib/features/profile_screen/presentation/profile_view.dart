@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:movies_app/core/di/service_locator.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
-import 'package:movies_app/features/auth/domain/repositories/auth_repository.dart';
-import 'package:movies_app/features/auth/presentation/pages/login/login_view.dart';
 import 'package:movies_app/features/profile_screen/presentation/profile_screen.dart';
 
 class ProfileView extends StatefulWidget {
@@ -36,24 +33,6 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
     super.dispose();
   }
 
-  Future<void> _logout(BuildContext context) async {
-    try {
-      await sl<AuthRepository>().signOut();
-      if (context.mounted) {
-        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
-          MaterialPageRoute(builder: (context) => const LoginView()),
-              (route) => false,
-        );
-      }
-    } catch (_) {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Logout failed')),
-        );
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,41 +42,49 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
           children: [
             const SizedBox(height: 20),
 
-            // هيدر الملف الشخصي: الأفاتار، الاسم، وأرقام العدادات
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Column(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       CircleAvatar(
-                        radius: 40,
+                        radius: 52,
                         backgroundColor: Colors.transparent,
-                        backgroundImage: AssetImage(AppAssets.avatars[selectedAvatarIndex]),
+                        backgroundImage: AssetImage(
+                          AppAssets.avatars[selectedAvatarIndex],
+                        ),
                       ),
                       const SizedBox(height: 10),
                       Text(
                         userName,
                         style: AppStyles.description.copyWith(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
-                  const Spacer(),
-                  _buildStat(watchList.length.toString(), 'Wish List'),
-                  const SizedBox(width: 32),
-                  _buildStat(historyList.length.toString(), 'History'),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 28),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildStat(watchList.length.toString(), 'Wish List'),
+                        _buildStat(historyList.length.toString(), 'History'),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
 
             const SizedBox(height: 24),
 
-            // أزرار Edit Profile و Exit
+
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
@@ -105,7 +92,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                   Expanded(
                     flex: 2,
                     child: SizedBox(
-                      height: 48,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: () async {
                           final result = await Navigator.of(context, rootNavigator: true).push(
@@ -136,8 +123,8 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                         child: Text(
                           'Edit Profile',
                           style: AppStyles.buttonText.copyWith(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -147,9 +134,9 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                   Expanded(
                     flex: 1,
                     child: SizedBox(
-                      height: 48,
+                      height: 52,
                       child: ElevatedButton(
-                        onPressed: () => _logout(context),
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.delete,
                           elevation: 0,
@@ -164,15 +151,15 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                               'Exit',
                               style: AppStyles.buttonText.copyWith(
                                 color: AppColors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(width: 6),
                             const Icon(
                               Icons.exit_to_app,
                               color: AppColors.white,
-                              size: 18,
+                              size: 20,
                             ),
                           ],
                         ),
@@ -185,36 +172,36 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
 
             const SizedBox(height: 20),
 
-            // شريط التبويبات (Tabs)
+
             TabBar(
               controller: _tabController,
               indicatorColor: AppColors.primary,
-              indicatorWeight: 3,
+              indicatorWeight: 3.5,
               indicatorSize: TabBarIndicatorSize.tab,
               labelColor: AppColors.primary,
               unselectedLabelColor: AppColors.white,
               dividerColor: Colors.transparent,
               labelStyle: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w700,
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
               ),
               unselectedLabelStyle: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w500,
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
               ),
               tabs: const [
                 Tab(
-                  icon: Icon(Icons.format_list_bulleted, size: 24),
+                  icon: Icon(Icons.format_list_bulleted, size: 26),
                   text: 'Watch List',
                 ),
                 Tab(
-                  icon: Icon(Icons.folder, size: 24),
+                  icon: Icon(Icons.folder, size: 26),
                   text: 'History',
                 ),
               ],
             ),
 
-            // محتوى الـ Tabs
+
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -243,15 +230,15 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
         Text(
           count,
           style: AppStyles.title.copyWith(
-            fontSize: 26,
-            fontWeight: FontWeight.w700,
+            fontSize: 32,
+            fontWeight: FontWeight.bold,
           ),
         ),
         const SizedBox(height: 6),
         Text(
           label,
           style: AppStyles.description.copyWith(
-            fontSize: 15,
+            fontSize: 17,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -263,14 +250,14 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
     if (movies.isEmpty) {
       return Center(
         child: SizedBox(
-          width: 124,
-          height: 124,
+          width: 140,
+          height: 140,
           child: Image.asset(
             emptyImagePath,
             fit: BoxFit.contain,
             errorBuilder: (_, _, _) => const Icon(
               Icons.local_movies_outlined,
-              size: 80,
+              size: 90,
               color: AppColors.grey,
             ),
           ),
@@ -313,12 +300,12 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                         movie.rating.toString(),
                         style: const TextStyle(
                           color: AppColors.white,
-                          fontSize: 11,
+                          fontSize: 12,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       const SizedBox(width: 2),
-                      const Icon(Icons.star, color: AppColors.primary, size: 12),
+                      const Icon(Icons.star, color: AppColors.primary, size: 13),
                     ],
                   ),
                 ),

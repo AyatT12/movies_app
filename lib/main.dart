@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'features/profile_screen/presentation/profile_view.dart';
-
+import 'package:movies_app/features/profile_screen/presentation/profile_view.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -11,10 +11,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
-      home: const ProfileView(),
+      home: ProfileView(),
     );
   }
 }
