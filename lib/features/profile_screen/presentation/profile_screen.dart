@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
-import 'package:movies_app/features/update_screen/presentation/text_field.dart';
+import 'package:movies_app/features/profile_screen/presentation/text_field.dart';
 
 import '../../../core/utils/app_colors.dart';
-
 import 'avatar_bottom_sheet.dart';
 import 'button.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final String currentName;
+  final String currentPhone;
+  final int currentAvatarIndex;
+
+  const ProfileScreen({
+    super.key,
+    this.currentName = 'John Safwat',
+    this.currentPhone = '01200000000',
+    this.currentAvatarIndex = 0,
+  });
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -17,18 +25,19 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final List<String> _avatars = List.generate(
     9,
-    (index) => 'assets/images/avatar_${index + 1}.png',
+        (index) => 'assets/images/avatar_${index + 1}.png',
   );
 
-  int _selectedAvatarIndex = 0;
+  late int _selectedAvatarIndex;
   late final TextEditingController _nameController;
   late final TextEditingController _phoneController;
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: 'John Safwat');
-    _phoneController = TextEditingController(text: '01200000000');
+    _selectedAvatarIndex = widget.currentAvatarIndex;
+    _nameController = TextEditingController(text: widget.currentName);
+    _phoneController = TextEditingController(text: widget.currentPhone);
   }
 
   @override
@@ -56,7 +65,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: const Icon(Icons.arrow_back, color: AppColors.primary),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: AppColors.primary),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text(
           'Pick Avatar',
           style: TextStyle(color: AppColors.primary, fontSize: 20),
@@ -106,20 +118,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
             ),
-
-            const SizedBox(height: 250),
+            const SizedBox(height: 40),
             PrimaryButton(
               label: 'Delete Account',
               backgroundColor: AppColors.delete,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
             const SizedBox(height: 14),
             PrimaryButton(
               label: 'Update Data',
               backgroundColor: AppColors.primary,
               textColor: Colors.black,
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context, {
+                  'name': _nameController.text,
+                  'phone': _phoneController.text,
+                  'avatarIndex': _selectedAvatarIndex,
+                });
+              },
             ),
             const SizedBox(height: 24),
           ],

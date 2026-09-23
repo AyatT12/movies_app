@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'features/update_screen/presentation/profile_screen.dart';
+import 'features/profile_screen/presentation/profile_view.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Movies App',
-      home: const ProfileScreen(),
+      home: const ProfileView(),
     );
   }
 }
