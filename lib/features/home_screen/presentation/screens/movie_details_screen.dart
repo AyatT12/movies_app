@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:movies_app/core/di/service_locator.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_text_styles.dart';
 import 'package:movies_app/features/home_screen/data/datasources/home_remote_data_source.dart';
 import 'package:movies_app/features/home_screen/domain/entities/movie_details_entity.dart';
+
 import 'package:movies_app/l10n/app_localizations.dart';
+
+import '../../../profile_screen/domain/profile_entities.dart';
+import '../../../profile_screen/domain/profile_repo.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   final int movieId;
@@ -18,16 +23,61 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   final HomeRemoteDataSource _dataSource = HomeRemoteDataSource();
   late Future<MovieDetailsEntity> _movieDetailsFuture;
   late Future<List<MovieSuggestionEntity>> _movieSuggestionsFuture;
+  bool _isInWatchList = false;
 
   @override
   void initState() {
     super.initState();
+    _checkWatchListStatus();
     _movieDetailsFuture = _dataSource
         .getMovieDetails(widget.movieId)
-        .then((model) => model.toEntity());
+        .then((model) {
+      final entity = model.toEntity();
+      _recordHistory(entity);
+      return entity;
+    });
     _movieSuggestionsFuture = _dataSource
         .getMovieSuggestions(widget.movieId)
         .then((models) => models.map((m) => m.toEntity()).toList());
+  }
+
+  Future<void> _checkWatchListStatus() async {
+    try {
+      final isSaved = await sl<ProfileRepo>().isMovieInWatchList(widget.movieId.toString());
+      if (mounted) {
+        setState(() {
+          _isInWatchList = isSaved;
+        });
+      }
+    } catch (_) {}
+  }
+
+  void _recordHistory(MovieDetailsEntity movie) {
+    sl<ProfileRepo>().addToHistory(
+      ProfileMovieEntity(
+        id: movie.id.toString(),
+        title: movie.title,
+        posterUrl: movie.mediumCoverImage,
+        rating: movie.rating.toDouble(),
+      ),
+    );
+  }
+
+  Future<void> _toggleWatchList(MovieDetailsEntity movie) async {
+    try {
+      final movieEntity = ProfileMovieEntity(
+        id: movie.id.toString(),
+        title: movie.title,
+        posterUrl: movie.mediumCoverImage,
+        rating: movie.rating.toDouble(),
+      );
+      await sl<ProfileRepo>().toggleWatchList(movieEntity);
+      if (mounted) {
+        setState(() {
+          _isInWatchList = !_isInWatchList;
+        });
+      }
+    } catch (_) {}
   }
 
   @override
@@ -40,7 +90,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         future: _movieDetailsFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(color: AppColors.primary),
             );
           }
@@ -70,11 +120,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                       fit: BoxFit.cover,
                       width: double.infinity,
                       height: 550,
-                      errorBuilder: (_, __, ___) => Container(
+                      errorBuilder: (_, error, stackTrace) => Container(
                         height: 550,
                         width: double.infinity,
                         color: AppColors.cardDark,
-                        child: Icon(
+                        child: const Icon(
                           Icons.broken_image,
                           color: AppColors.grey,
                           size: 50,
@@ -98,22 +148,22 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     ),
                     SafeArea(
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             IconButton(
                               onPressed: () => Navigator.pop(context),
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.arrow_back_ios,
                                 color: AppColors.white,
                               ),
                             ),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () => _toggleWatchList(movie),
                               icon: Icon(
-                                Icons.bookmark,
-                                color: AppColors.white,
+                                _isInWatchList ? Icons.bookmark : Icons.bookmark_border,
+                                color: _isInWatchList ? AppColors.primary : AppColors.white,
                               ),
                             ),
                           ],
@@ -123,12 +173,12 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     Positioned.fill(
                       child: Center(
                         child: Container(
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
+                          padding: const EdgeInsets.all(12),
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
                             color: Colors.white24,
                           ),
-                          child: Icon(
+                          child: const Icon(
                             Icons.play_arrow,
                             color: AppColors.primary,
                             size: 70,
@@ -147,7 +197,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                             textAlign: TextAlign.center,
                             style: AppTextStyles.movieTitle,
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           Text('${movie.year}', style: AppTextStyles.movieYear),
                         ],
                       ),
@@ -155,7 +205,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -163,7 +213,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red[700],
-                          padding: EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -173,7 +223,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           style: AppTextStyles.watchButton,
                         ),
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
@@ -194,15 +244,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       Text(
                         localizations?.screenShots ?? 'Screen Shots',
                         style: AppTextStyles.sectionHeader,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       ...movie.screenshots.map(
                             (image) => Padding(
-                          padding: EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.only(bottom: 16),
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(16),
                             child: Image.network(
@@ -210,11 +260,11 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                               fit: BoxFit.cover,
                               height: 170,
                               width: double.infinity,
-                              errorBuilder: (_, __, ___) => Container(
+                              errorBuilder: (_, error, stackTrace) => Container(
                                 height: 220,
                                 width: double.infinity,
                                 color: AppColors.cardDark,
-                                child: Icon(
+                                child: const Icon(
                                   Icons.broken_image,
                                   color: AppColors.grey,
                                 ),
@@ -223,18 +273,18 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       Text(
                         'Similar',
                         style: AppTextStyles.sectionHeader,
                       ),
-                      SizedBox(height: 8),
+                      const SizedBox(height: 8),
                       FutureBuilder<List<MovieSuggestionEntity>>(
                         future: _movieSuggestionsFuture,
                         builder: (context, suggestionSnapshot) {
                           if (suggestionSnapshot.connectionState ==
                               ConnectionState.waiting) {
-                            return Center(
+                            return const Center(
                               child: CircularProgressIndicator(
                                 color: AppColors.primary,
                               ),
@@ -242,19 +292,19 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           }
                           if (!suggestionSnapshot.hasData ||
                               suggestionSnapshot.data!.isEmpty) {
-                            return SizedBox.shrink();
+                            return const SizedBox.shrink();
                           }
 
                           final similarMovies = suggestionSnapshot.data!;
                           return GridView.builder(
                             shrinkWrap: true,
                             padding: EdgeInsets.zero,
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: similarMovies.length > 4
                                 ? 4
                                 : similarMovies.length,
                             gridDelegate:
-                            SliverGridDelegateWithFixedCrossAxisCount(
+                            const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
                               crossAxisSpacing: 16,
                               mainAxisSpacing: 16,
@@ -281,10 +331,10 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                         child: Image.network(
                                           item.mediumCoverImage,
                                           fit: BoxFit.cover,
-                                          errorBuilder: (_, __, ___) =>
+                                          errorBuilder: (_, error, stackTrace) =>
                                               Container(
                                                 color: AppColors.cardDark,
-                                                child: Icon(
+                                                child: const Icon(
                                                   Icons.broken_image,
                                                   color: AppColors.grey,
                                                 ),
@@ -295,7 +345,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                         top: 8,
                                         left: 8,
                                         child: Container(
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                             horizontal: 8,
                                             vertical: 4,
                                           ),
@@ -311,14 +361,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                             children: [
                                               Text(
                                                 '${item.rating}',
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              SizedBox(width: 4),
-                                              Icon(
+                                              const SizedBox(width: 4),
+                                              const Icon(
                                                 Icons.star,
                                                 color: AppColors.primary,
                                                 size: 14,
@@ -335,28 +385,28 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           );
                         },
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Text(
                         localizations?.summary ?? 'Summary',
                         style: AppTextStyles.sectionHeader,
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       Text(
                         movie.descriptionFull.isNotEmpty
                             ? movie.descriptionFull
                             : movie.descriptionIntro,
                         style: AppTextStyles.summaryText,
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       Text(
                         localizations?.cast ?? 'Cast',
                         style: AppTextStyles.sectionHeader,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       ...movie.cast.map(
                             (member) => Container(
-                          margin: EdgeInsets.only(bottom: 12),
-                          padding: EdgeInsets.all(8),
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
                             color: AppColors.cardDark,
                             borderRadius: BorderRadius.circular(16),
@@ -371,21 +421,22 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                                   width: 65,
                                   height: 65,
                                   fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => Container(
-                                    width: 65,
-                                    height: 65,
-                                    color: Colors.grey,
-                                    child: Icon(Icons.person),
-                                  ),
+                                  errorBuilder: (_, error, stackTrace) =>
+                                      Container(
+                                        width: 65,
+                                        height: 65,
+                                        color: Colors.grey,
+                                        child: const Icon(Icons.person),
+                                      ),
                                 )
                                     : Container(
                                   width: 65,
                                   height: 65,
                                   color: Colors.grey,
-                                  child: Icon(Icons.person),
+                                  child: const Icon(Icons.person),
                                 ),
                               ),
-                              SizedBox(width: 16),
+                              const SizedBox(width: 16),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -405,19 +456,19 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 32),
+                      const SizedBox(height: 32),
                       Text(
                         localizations?.genres ?? 'Genres',
                         style: AppTextStyles.sectionHeader,
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Wrap(
                         spacing: 12,
                         runSpacing: 12,
                         children: movie.genres
                             .map(
                               (genre) => Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                               horizontal: 20,
                               vertical: 10,
                             ),
@@ -433,7 +484,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         )
                             .toList(),
                       ),
-                      SizedBox(height: 50),
+                      const SizedBox(height: 50),
                     ],
                   ),
                 ),
@@ -447,7 +498,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   Widget _buildStatItem(IconData icon, String value, Color iconColor) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
         color: AppColors.cardDark,
         borderRadius: BorderRadius.circular(16),
@@ -455,7 +506,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       child: Row(
         children: [
           Icon(icon, color: iconColor, size: 24),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
           Text(value, style: AppTextStyles.statValue),
         ],
       ),

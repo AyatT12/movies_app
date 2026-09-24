@@ -1,8 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:movies_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:movies_app/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:movies_app/features/profile/domain/repositories/profile_repository.dart';
-import 'package:movies_app/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:movies_app/features/auth/presentation/cubit/forget_password_cubit.dart';
 import 'package:movies_app/features/auth/presentation/cubit/auth_gate_cubit.dart';
 import 'package:movies_app/features/home_screen/data/datasources/home_remote_data_source.dart';
@@ -16,24 +14,29 @@ import 'package:movies_app/features/browse/data/repositories/browse_repository_i
 import 'package:movies_app/features/browse/domain/repositories/browse_repository.dart';
 import 'package:movies_app/features/browse/presentation/bloc/browse_bloc.dart';
 
+
+
+import '../../features/profile_screen/data/profile_repo_impl.dart';
+import '../../features/profile_screen/domain/profile_repo.dart';
+
 final sl = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
   sl.registerFactory<ForgetPasswordCubit>(
-    () => ForgetPasswordCubit(sl<AuthRepository>()),
+        () => ForgetPasswordCubit(sl<AuthRepository>()),
   );
   sl.registerFactory<AuthGateCubit>(() => AuthGateCubit());
-  sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl());
+  sl.registerLazySingleton<ProfileRepo>(() => ProfileRepoImpl());
   sl.registerLazySingleton<HomeRepository>(
-    () => HomeRepositoryImpl(HomeRemoteDataSource()),
+        () => HomeRepositoryImpl(HomeRemoteDataSource()),
   );
   sl.registerLazySingleton<SearchRepository>(
-    () => SearchRepositoryImpl(SearchRemoteDataSource()),
+        () => SearchRepositoryImpl(SearchRemoteDataSource()),
   );
   sl.registerFactory<SearchBloc>(() => SearchBloc(sl<SearchRepository>()));
   sl.registerLazySingleton<BrowseRepository>(
-    () => BrowseRepositoryImpl(HomeRemoteDataSource()),
+        () => BrowseRepositoryImpl(HomeRemoteDataSource()),
   );
   sl.registerFactory<BrowseBloc>(() => BrowseBloc(sl<BrowseRepository>()));
 }

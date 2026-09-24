@@ -5,9 +5,9 @@ import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:movies_app/features/auth/presentation/pages/login/login_view.dart';
-import 'package:movies_app/features/profile/domain/repositories/profile_repository.dart';
 import 'package:movies_app/l10n/app_localizations.dart';
 
+import '../domain/profile_repo.dart';
 import 'avatar_bottom_sheet.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadUserData() async {
     try {
-      final userData = await sl<ProfileRepository>().getUserData();
+      final userData = await sl<ProfileRepo>().getUserData();
       if (userData != null && mounted) {
         String avatarUrl = userData['avatarUrl'] ?? AppAssets.avatars[0];
         int avatarIndex = AppAssets.avatars.indexOf(avatarUrl);
@@ -88,10 +88,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _updateProfile() async {
     final name = _nameController.text.trim();
     final phone = _phoneController.text.trim();
-    final avatarUrl = AppAssets.avatars[_selectedAvatarIndex];
+    final avatarIndex = AppAssets.avatars[_selectedAvatarIndex];
 
     try {
-      await sl<ProfileRepository>().updateProfile(name, phone, avatarUrl);
+      await sl<ProfileRepo>().updateProfile(
+        name: name,
+        phone: phone,
+        avatarIndex: _selectedAvatarIndex,
+      );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Profile Updated Successfully')),
@@ -114,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _deleteAccount() async {
     try {
-      await sl<ProfileRepository>().deleteAccount();
+      await sl<ProfileRepo>().deleteAccount();
       if (mounted) {
         Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const LoginView()),

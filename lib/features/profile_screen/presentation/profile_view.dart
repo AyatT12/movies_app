@@ -1,8 +1,16 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:movies_app/core/di/service_locator.dart';
 import 'package:movies_app/core/utils/app_assets.dart';
 import 'package:movies_app/core/utils/app_colors.dart';
 import 'package:movies_app/core/utils/app_styles.dart';
+import 'package:movies_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:movies_app/features/auth/presentation/pages/login/login_view.dart';
+
 import 'package:movies_app/features/profile_screen/presentation/profile_screen.dart';
+
+import '../domain/profile_entities.dart';
+import '../domain/profile_repo.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -18,19 +26,75 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
   String userPhone = '01200000000';
   int selectedAvatarIndex = 0;
 
-  final List<dynamic> watchList = [];
-  final List<dynamic> historyList = [];
+  List<ProfileMovieEntity> watchList = [];
+  List<ProfileMovieEntity> historyList = [];
+
+  StreamSubscription? _watchListSub;
+  StreamSubscription? _historySub;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _loadUserProfile();
+    _listenToMovies();
+  }
+
+  Future<void> _loadUserProfile() async {
+    try {
+      final user = await sl<ProfileRepo>().getProfile();
+      if (mounted) {
+        setState(() {
+          userName = user.name.isNotEmpty ? user.name : userName;
+          userPhone = user.phone.isNotEmpty ? user.phone : userPhone;
+          selectedAvatarIndex = user.avatarIndex;
+        });
+      }
+    } catch (_) {}
+  }
+
+  void _listenToMovies() {
+    _watchListSub = sl<ProfileRepo>().getWatchListStream().listen((list) {
+      if (mounted) {
+        setState(() {
+          watchList = list;
+        });
+      }
+    });
+
+    _historySub = sl<ProfileRepo>().getHistoryStream().listen((list) {
+      if (mounted) {
+        setState(() {
+          historyList = list;
+        });
+      }
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _watchListSub?.cancel();
+    _historySub?.cancel();
     super.dispose();
+  }
+
+  Future<void> _logout() async {
+    try {
+      await sl<AuthRepository>().signOut();
+      if (mounted) {
+        Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (_) => const LoginView()),
+              (route) => false,
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Logout failed')),
+        );
+      }
+    }
   }
 
   @override
@@ -41,8 +105,6 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
         child: Column(
           children: [
             const SizedBox(height: 20),
-
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20.0),
               child: Row(
@@ -81,10 +143,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                 ],
               ),
             ),
-
             const SizedBox(height: 24),
-
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
@@ -112,6 +171,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                               selectedAvatarIndex = result['avatarIndex'] ?? selectedAvatarIndex;
                             });
                           }
+                          _loadUserProfile();
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
@@ -136,7 +196,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                     child: SizedBox(
                       height: 52,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: _logout,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.delete,
                           elevation: 0,
@@ -169,10 +229,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
-
             TabBar(
               controller: _tabController,
               indicatorColor: AppColors.primary,
@@ -200,8 +257,6 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
                 ),
               ],
             ),
-
-
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -246,7 +301,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
     );
   }
 
-  Widget _buildGrid(List<dynamic> movies, String emptyImagePath) {
+  Widget _buildGrid(List<ProfileMovieEntity> movies, String emptyImagePath) {
     if (movies.isEmpty) {
       return Center(
         child: SizedBox(
@@ -255,7 +310,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
           child: Image.asset(
             emptyImagePath,
             fit: BoxFit.contain,
-            errorBuilder: (_, _, _) => const Icon(
+            errorBuilder: (_, error, stackTrace) => const Icon(
               Icons.local_movies_outlined,
               size: 90,
               color: AppColors.grey,
@@ -283,7 +338,7 @@ class _ProfileViewState extends State<ProfileView> with SingleTickerProviderStat
               Image.network(
                 movie.posterUrl,
                 fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => Container(color: AppColors.textfield),
+                errorBuilder: (_, error, stackTrace) => Container(color: AppColors.textfield),
               ),
               Positioned(
                 top: 6,
